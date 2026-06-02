@@ -1,0 +1,10 @@
+# .htaccess
+RewriteEngine On
+
+# Ne pas réécrire si c'est un fichier réel (CSS, JS, images)
+RewriteCond %{REQUEST_FILENAME} !-f
+# Ne pas réécrire si c'est un dossier réel
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Tout le reste va vers index.php
+RewriteRule ^ index.php [QSA,L]
