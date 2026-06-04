@@ -75,7 +75,7 @@ abstract class Model
      * @param int $perPage  Nombre d'éléments par page
      * @return array  ['data' => [...], 'total' => 48, 'pages' => 4, 'current' => 2]
      */
-    public function paginate(int $page = 1, int $perPage = 12): array
+    public function paginate(int $page = 1, int $perPage = 5): array
     {
         $offset = ($page - 1) * $perPage;
         $total  = (int) $this->pdo

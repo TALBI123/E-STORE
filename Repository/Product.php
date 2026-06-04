@@ -7,7 +7,7 @@ use App\Core\Model;
 class Product extends Model
 {
     protected string $table = 'products';
-
+    
     public function findBySlug(string $slug): ?array
     {
         $results = $this->findBy("slug", $slug);
@@ -117,27 +117,26 @@ class Product extends Model
     //  generateSlug() — Génère un slug URL-friendly depuis un nom.
     //  Ex: "Chaussure Sport Nike" → "chaussure-sport-nike"
     //  Gère les caractères accentués français.
-
-    // public static function generateSlug(string $name): string
-    // {
-    //     $name = mb_strtolower(trim($name), 'UTF-8');
-    //     $map  = [
-    //         'à' => 'a',
-    //         'â' => 'a',
-    //         'é' => 'e',
-    //         'è' => 'e',
-    //         'ê' => 'e',
-    //         'î' => 'i',
-    //         'ô' => 'o',
-    //         'ù' => 'u',
-    //         'û' => 'u',
-    //         'ç' => 'c',
-    //         'œ' => 'oe',
-    //         'æ' => 'ae'
-    //     ];
-    //     $name = strtr($name, $map);
-    //     $name = preg_replace('/[^a-z0-9\s-]/', '', $name);
-    //     $name = preg_replace('/[\s-]+/', '-', $name);
-    //     return trim($name, '-');
-    // }
+    public static function generateSlug(string $name): string
+    {
+        $name = mb_strtolower(trim($name), 'UTF-8');
+        $map  = [
+            'à' => 'a',
+            'â' => 'a',
+            'é' => 'e',
+            'è' => 'e',
+            'ê' => 'e',
+            'î' => 'i',
+            'ô' => 'o',
+            'ù' => 'u',
+            'û' => 'u',
+            'ç' => 'c',
+            'œ' => 'oe',
+            'æ' => 'ae'
+        ];
+        $name = strtr($name, $map);
+        $name = preg_replace('/[^a-z0-9\s-]/', '', $name);
+        $name = preg_replace('/[\s-]+/', '-', $name);
+        return trim($name, '-');
+    }
 }

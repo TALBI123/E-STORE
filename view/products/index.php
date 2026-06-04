@@ -1,4 +1,4 @@
-<?echo $totalPages;?>
+<? echo $totalPages; ?>
 <div class="row">
   <!-- Filtres latéraux -->
   <aside class="col-md-3">
@@ -8,7 +8,7 @@
       <div class="mb-3">
         <label class="form-label">Recherche</label>
         <input type="text" name="q" class="form-control"
-               value="<?= htmlspecialchars($query ?? '') ?>">
+          value="<?= htmlspecialchars($query ?? '') ?>">
       </div>
 
       <div class="mb-3">
@@ -27,11 +27,11 @@
       <div class="row mb-3">
         <div class="col">
           <input type="number" name="min_price" class="form-control"
-                 placeholder="Prix min" value="<?= $filters['min_price'] ?? '' ?>">
+            placeholder="Prix min" value="<?= $filters['min_price'] ?? '' ?>">
         </div>
         <div class="col">
           <input type="number" name="max_price" class="form-control"
-                 placeholder="Prix max" value="<?= $filters['max_price'] ?? '' ?>">
+            placeholder="Prix max" value="<?= $filters['max_price'] ?? '' ?>">
         </div>
       </div>
 
@@ -59,8 +59,8 @@
           <div class="col">
             <div class="card h-100 shadow-sm">
               <img src="/assets/img/products/<?= htmlspecialchars($product['image'] ?: 'placeholder.jpg') ?>"
-                   class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>"
-                   style="height: 200px; object-fit: cover;">
+                class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>"
+                style="height: 200px; object-fit: cover;">
               <div class="card-body">
                 <h6 class="card-title"><?= htmlspecialchars($product['name']) ?></h6>
                 <p class="text-primary fw-bold"><?= number_format($product['price'], 2) ?> MAD</p>
@@ -69,11 +69,11 @@
                 <?php endif; ?>
               </div>
               <div class="card-footer d-flex gap-2">
-                <a href="/products/<?= htmlspecialchars($product['slug']) ?>"
-                   class="btn btn-sm btn-outline-primary flex-grow-1">Voir</a>
+                <a href="<?php echo BASE_URL; ?>/products/<?= htmlspecialchars($product['slug']) ?>"
+                  class="btn btn-sm btn-outline-primary flex-grow-1">Voir</a>
                 <?php if ($product['stock'] > 0): ?>
                   <button class="btn btn-sm btn-primary btn-add-cart"
-                          data-product-id="<?= $product['id'] ?>">🛒</button>
+                    data-product-id="<?= $product['id'] ?>">🛒</button>
                 <?php endif; ?>
               </div>
             </div>
@@ -81,7 +81,7 @@
         <?php endforeach; ?>
       <?php endif; ?>
     </div>
-
+    <?php echo "Total pages is : " . $totalPages; ?>
     <!-- Pagination -->
     <?php if (($totalPages ?? 1) > 1): ?>
       <nav class="mt-4">
@@ -98,21 +98,23 @@
 </div>
 
 <script>
-// Ajout au panier en AJAX — pas de rechargement de page
-document.querySelectorAll('.btn-add-cart').forEach(btn => {
+  // Ajout au panier en AJAX — pas de rechargement de page
+  document.querySelectorAll('.btn-add-cart').forEach(btn => {
     btn.addEventListener('click', async () => {
-        const productId = btn.dataset.productId;
-        const res = await fetch('/cart/add', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-            body: `product_id=${productId}&quantity=1`
-        });
-        const data = await res.json();
-        alert(data.message);
-        if (data.success) {
-            document.getElementById('cart-count').textContent =
-                Math.round(data.total / 1); // simplifié
-        }
+      const productId = btn.dataset.productId;
+      const res = await fetch('/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `product_id=${productId}&quantity=1`
+      });
+      const data = await res.json();
+      alert(data.message);
+      if (data.success) {
+        document.getElementById('cart-count').textContent =
+          Math.round(data.total / 1); // simplifié
+      }
     });
-});
+  });
 </script>
