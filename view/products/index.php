@@ -1,3 +1,4 @@
+<?echo $totalPages;?>
 <div class="row">
   <!-- Filtres latéraux -->
   <aside class="col-md-3">

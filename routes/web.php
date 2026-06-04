@@ -1,11 +1,12 @@
 <?php
 // use core\Router;
-require_once "core/Router.php";
+require_once "Core/Router.php";
 
 $router = Router::getInstance();
 
 // ── Test ──────────────────────────────────
-$router->get("/test","TestController@test");
+$router->get("/test","TestController@index");
+$router->get("/test/:id","TestController@getAllTest");
 // ── Pages publiques ──────────────────────────────────
 $router->get('/',                          'HomeController@index');
 $router->get('/products',                  'ProductController@index');

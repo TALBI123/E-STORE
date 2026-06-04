@@ -1,19 +1,27 @@
 <?php
+
+namespace App\Core;
+
 abstract class Controller
 {
+    // public function __construct()
+    // {
+    //     // Démarrer la session automatiquement pour tous les contrôleurs
+    //     if (session_status() === PHP_SESSION_NONE) {
+    //         session_start();
+    //     }
+    // }
+
     protected function render(string $view, array $data = [])
     {
         extract($data);
-        $base = dirname(__DIR__, 2) . "/views/";
+        $base = dirname(__DIR__) . "/view/";
         $viewPath = $base . $view . ".php";
         if (!file_exists($viewPath)) {
-            throw new \RuntimeException("Vue introuvable : {$viewPath}");
+            die("Vue introuvable : {$viewPath}");
         }
-        // Charge le header commun (navbar, CSS...)
         require_once $base . 'layouts/header.php';
-        // Charge la vue spécifique
         require_once $viewPath;
-        // Charge le footer commun (scripts JS, fermeture HTML)
         require_once $base . 'layouts/footer.php';
     }
     protected function redirect(string $url)
@@ -28,7 +36,7 @@ abstract class Controller
             $this->redirect('/login');
         }
     }
-    
+
     protected function isAdmin(): void
     {
         $this->isAuthenticated();

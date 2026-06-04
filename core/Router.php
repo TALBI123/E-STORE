@@ -18,20 +18,11 @@ class Router
         return self::$instance;
     }
 
-    /**
-     * get() — Enregistre une route pour la méthode HTTP GET.
-     * @param string $path    Ex: '/products/:id'
-     * @param string $action  Ex: 'ProductController@show'
-     */
     public function get(string $path, string $action): void
     {
         $this->routes['GET'][$path] = $action;
+        // echo "GET route added: {$path} => {$action}<br>";
     }
-
-    /**
-     * post() — Enregistre une route pour la méthode HTTP POST.
-     * Utilisé pour les formulaires (login, ajout au panier, commande...).
-     */
     public function post(string $path, string $action): void
     {
         $this->routes['POST'][$path] = $action;
@@ -52,6 +43,11 @@ class Router
         $uri = parse_url($requestUri, PHP_URL_PATH);
         $uri = rtrim($uri, '/') ?: '/';
         $uri = substr($uri, strlen($BASE_PATH));
+        $uri = $uri ?: '/';
+        // echo "URI traitée pour le routage : {$uri}<br>";
+        // echo "Méthode HTTP : {$method}<br>";
+        // echo $this->routes[$method][$uri] ?? "Aucune route trouvée pour cette URI et méthode.<br>";
+        // echo print_r($this->routes[$method], true);
         foreach ($this->routes[$method] ?? [] as $pattern => $action) {
             // Convertit ':id' ou ':slug' en groupe de capture regex
             // Ex: '/products/:slug' → '#^/products/([^/]+)$#'
@@ -64,22 +60,23 @@ class Router
 
                 // Sépare 'ProductController@show' en ['ProductController', 'show']
                 [$controllerName, $actionMethod] = explode('@', $action);
-                $controllerClass = "\\controller\\{$controllerName}";
-                echo "Controller class: {$controllerClass}<br>";
+                
+                // echo "Controller: {$controllerName}, Action: {$actionMethod}  waa3<br>";
+                $controllerClass = "\\Controller\\{$controllerName}";
+                // echo "Controller class: {$controllerClass}<br>";
                 // CORRECTION 4 : Vérifier que la classe existe
                 if (!class_exists($controllerClass)) {
                     http_response_code(500);
                     die("Classe contrôleur introuvable : {$controllerClass}");
                 }
 
-                // Instancie le contrôleur et appelle la méthode avec les paramètres
                 $controller = new $controllerClass();
                 $controller->$actionMethod(...$matches);
                 return;
             }
         }
-        echo dirname(__DIR__, 1);
-        echo "<br>URI demandée : {$uri}";
+        // echo dirname(__DIR__, 1);
+        // echo "<br>URI demandée : {$uri}";
 
         http_response_code(404);
         require_once dirname(__DIR__, 1) . '\view\errors\404.php';

@@ -1,4 +1,4 @@
-<div class="row justify-content-center">
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
   <div class="col-md-5">
     <div class="card shadow-sm">
       <div class="card-body p-4">
@@ -12,7 +12,7 @@
           <div class="alert alert-success">Compte créé ! Vous pouvez vous connecter.</div>
         <?php endif; ?>
 
-        <form method="POST" action="/login">
+        <form method="POST" action="<?php echo $BASE_URL; ?>/login">
 
           <div class="mb-3">
             <label class="form-label">Email</label>
@@ -26,7 +26,7 @@
         </form>
 
         <p class="text-center mt-3">
-          Pas de compte ? <a href="/register">S'inscrire</a>
+          Pas de compte ? <a href="<?php echo $BASE_URL; ?>/register">S'inscrire</a>
         </p>
       </div>
     </div>

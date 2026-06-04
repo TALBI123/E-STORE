@@ -1,9 +1,18 @@
 <?php
+
 namespace Controller;
-class TestController
+
+use App\Core\Controller;
+use App\Repository\TestModel;
+
+class TestController extends Controller
 {
-    public function test()
-    {
-        echo "Hello from TestController!";
+    public function index(){
+        $testModel = new TestModel();
+        $tests = $testModel->getAllTest();
+
+        $this->render('test/test', [
+            'tests' => $tests,
+        ]);
     }
 }

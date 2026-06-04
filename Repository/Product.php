@@ -13,19 +13,17 @@ class Product extends Model
         $results = $this->findBy("slug", $slug);
         return $results ? $results[0] : null;
     }
-    /**
-     * search() — Recherche de produits par mot-clé et/ou filtres.
-     * Utilise MATCH...AGAINST pour la recherche full-text (index FULLTEXT en BDD).
-     * Les filtres sont appliqués dynamiquement selon ce qui est fourni.
-     *
-     * @param string $query    Terme de recherche (peut être vide)
-     * @param array  $filters  Filtres optionnels :
-     *                         - category_id : int
-     *                         - min_price   : float
-     *                         - max_price   : float
-     *                         - sort        : 'price_asc'|'price_desc'|'newest'
-     * @return array  Liste des produits correspondants
-     */
+
+    //  search() — Recherche de produits par mot-clé et/ou filtres.
+    //  Utilise MATCH...AGAINST pour la recherche full-text (index FULLTEXT en BDD).
+    //      Les filtres sont appliqués dynamiquement selon ce qui est fourni.
+    //      @param string $query    Terme de recherche (peut être vide)
+    //      @param array  $filters  Filtres optionnels :
+    //                              - category_id : int
+    //                              - min_price   : float
+    //                              - max_price   : float
+    //                              - sort        : 'price_asc'|'price_desc'|'newest'
+
     public function search(string $query = '', array $filters = []): array
     {
         $sql    = "SELECT p.*, c.name AS category_name
@@ -115,34 +113,31 @@ class Product extends Model
         return $stmt->fetchAll();
     }
 
-    /**
-     * generateSlug() — Génère un slug URL-friendly depuis un nom.
-     * Ex: "Chaussure Sport Nike" → "chaussure-sport-nike"
-     * Gère les caractères accentués français.
-     *
-     * @param string $name
-     * @return string
-     */
-    public static function generateSlug(string $name): string
-    {
-        $name = mb_strtolower(trim($name), 'UTF-8');
-        $map  = [
-            'à' => 'a',
-            'â' => 'a',
-            'é' => 'e',
-            'è' => 'e',
-            'ê' => 'e',
-            'î' => 'i',
-            'ô' => 'o',
-            'ù' => 'u',
-            'û' => 'u',
-            'ç' => 'c',
-            'œ' => 'oe',
-            'æ' => 'ae'
-        ];
-        $name = strtr($name, $map);
-        $name = preg_replace('/[^a-z0-9\s-]/', '', $name);
-        $name = preg_replace('/[\s-]+/', '-', $name);
-        return trim($name, '-');
-    }
+
+    //  generateSlug() — Génère un slug URL-friendly depuis un nom.
+    //  Ex: "Chaussure Sport Nike" → "chaussure-sport-nike"
+    //  Gère les caractères accentués français.
+
+    // public static function generateSlug(string $name): string
+    // {
+    //     $name = mb_strtolower(trim($name), 'UTF-8');
+    //     $map  = [
+    //         'à' => 'a',
+    //         'â' => 'a',
+    //         'é' => 'e',
+    //         'è' => 'e',
+    //         'ê' => 'e',
+    //         'î' => 'i',
+    //         'ô' => 'o',
+    //         'ù' => 'u',
+    //         'û' => 'u',
+    //         'ç' => 'c',
+    //         'œ' => 'oe',
+    //         'æ' => 'ae'
+    //     ];
+    //     $name = strtr($name, $map);
+    //     $name = preg_replace('/[^a-z0-9\s-]/', '', $name);
+    //     $name = preg_replace('/[\s-]+/', '-', $name);
+    //     return trim($name, '-');
+    // }
 }

@@ -1,6 +1,6 @@
 <?php
-// app/Model/CartItem.php
-namespace App\Model;
+// app/Repository/CartItem.php
+namespace App\Repository;
 
 use App\Core\Model;
 
@@ -8,14 +8,10 @@ class CartItem extends Model
 {
     protected string $table = 'cart_items';
 
-    /**
-     * getCartItems() — Récupère les articles du panier avec les détails produit.
-     * Fait un JOIN pour avoir le nom, l'image du produit dans la même requête.
-     *
-     * @param int $cartId
-     * @return array  Chaque ligne : [id, cart_id, product_id, quantity,
-     *                               price_snapshot, product_name, product_image]
-     */
+
+    //   getCartItems() — Récupère les articles du panier avec les détails produit.
+    //  Fait un JOIN pour avoir le nom, l'image du produit dans la même requête.
+
     public function getCartItems(int $cartId): array
     {
         $stmt = $this->pdo->prepare(
@@ -29,15 +25,9 @@ class CartItem extends Model
         return $stmt->fetchAll();
     }
 
-    /** 
-     * addOrUpdate() — Ajoute un produit ou incrémente sa quantité si déjà présent.
-     * Utilise INSERT ... ON DUPLICATE KEY UPDATE (nécessite UNIQUE(cart_id, product_id)).
-     *
-     * @param int   $cartId
-     * @param int   $productId
-     * @param int   $quantity
-     * @param float $price     Prix actuel (snapshot pour garder l'historique)
-     */
+
+    //  addOrUpdate() — Ajoute un produit ou incrémente sa quantité si déjà présent.
+    //  Utilise INSERT ... ON DUPLICATE KEY UPDATE (nécessite UNIQUE(cart_id, product_id)).
     public function addOrUpdate(int $cartId, int $productId, int $quantity, float $price): void
     {
         $stmt = $this->pdo->prepare(
@@ -49,13 +39,9 @@ class CartItem extends Model
         $stmt->execute([$cartId, $productId, $quantity, $price]);
     }
 
-    /**
-     * updateQuantity() — Met à jour la quantité d'un article.
-     * Si quantité = 0, supprime l'article du panier.
-     *
-     * @param int $itemId
-     * @param int $quantity
-     */
+
+    //  updateQuantity() — Met à jour la quantité d'un article.
+    //  Si quantité = 0, supprime l'article du panier.
     public function updateQuantity(int $itemId, int $quantity): void
     {
         if ($quantity <= 0) {
@@ -65,25 +51,20 @@ class CartItem extends Model
         $this->update($itemId, ['quantity' => $quantity]);
     }
 
-    /**
-     * clearCart() — Vide complètement le panier.
-     * Appelé après la validation d'une commande.
-     *
-     * @param int $cartId
-     */
+    
+    //   clearCart() — Vide complètement le panier.
+    //   Appelé après la validation d'une commande.
+ 
     public function clearCart(int $cartId): void
     {
         $stmt = $this->pdo->prepare("DELETE FROM cart_items WHERE cart_id = ?");
         $stmt->execute([$cartId]);
     }
 
-    /**
-     * getTotal() — Calcule le montant total du panier.
-     * Utilise price_snapshot (le prix au moment de l'ajout, pas le prix actuel).
-     *
-     * @param int $cartId
-     * @return float
-     */
+    
+    //   getTotal() — Calcule le montant total du panier.
+    //   Utilise price_snapshot (le prix au moment de l'ajout, pas le prix actuel).
+     
     public function getTotal(int $cartId): float
     {
         $stmt = $this->pdo->prepare(
